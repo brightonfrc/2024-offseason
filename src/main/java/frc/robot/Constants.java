@@ -24,6 +24,48 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class Ports {
+    public static int kDriveFrontLeftMove = 1;
+    public static int kDriveFrontLeftTurn = 2;
+    public static int kDriveFrontRightMove = 3;
+    public static int kDriveFrontRightTurn = 4;
+    public static int kDriveBackLeftMove = 5;
+    public static int kDriveBackLeftTurn = 6;
+    public static int kDriveBackRightMove = 7;
+    public static int kDriveBackRightTurn = 8;
+
+    public static int kIntakeMotorPort=9;
+    public static int kLeftShooterMotor=10;
+    public static int kRightShooterMotor=11;
+
+    public static int kLiftMotor = 12;
+    }
+
+  public static class MotorConstants{
+    public static double distancePerRotation=100;
+    public static double movementPerRotation=400;
+  }
+  
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+    public static final int snapButtonNum=1;
+  }
+
+  public static class PIDConstants {
+    public static final double kDrivetrainP = 0.1;
+    public static final double kDrivetrainI = 0.0;
+    public static final double kDrivetrainD = 0.0;
+    public static final double kRobotTurningP=0.15;
+    public static final double kRobotTurningI=0.0;
+    public static final double kRobotTurningD=0.0;
+    public static final double snapMotorP = 0.2;
+    public static final double snapMotorI = 0.2;
+    public static final double snapMotorD = 0.0;
+  }
+  public static class SnapConstants{
+    public static final double snapAngleTolerance=1.0;
+    public static final double snapBearingTolerance=2.0;
+  }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -137,5 +179,15 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+
+  
+  public static final class LiftConstants{
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kTolerance = 0.1;
+    public static final double kSetpoint = 5;
+
   }
 }

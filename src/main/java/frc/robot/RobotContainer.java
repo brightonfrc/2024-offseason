@@ -19,17 +19,32 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.Ports;
 // import frc.robot.commands.ManualDrive;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.Shooter;
+import frc.robot.commands.Climb;
+import frc.robot.commands.EjectNote;
+import frc.robot.commands.FireAmp;
+import frc.robot.commands.IntakeNote;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 // import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -43,14 +58,23 @@ public class RobotContainer {
   private final PathPlannerAuto m_autoCommand;
 
   // The driver's controller
-  PS4Controller m_driverController = new PS4Controller(OIConstants.kDriverControllerPort);
+  CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
+
+  private final VictorSPX intakeMotor = new VictorSPX(Ports.kIntakeMotorPort);
+  private final VictorSPX leftShooterMotor = new VictorSPX(Ports.kLeftShooterMotor);
+  private final VictorSPX rightShooterMotor = new VictorSPX(Ports.kRightShooterMotor);
+  private final CANSparkMax liftMotor = new CANSparkMax(Ports.kRightShooterMotor, MotorType.kBrushless);
+
+  private final Intake intake = new Intake(intakeMotor);
+  private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
+  private final Lift lift = new Lift(liftMotor);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // PathPlanner Named commands
-    NamedCommands.registerCommand("ShootIntoAmp", new ShootIntoAmp()); // TODO: Create this command
+    // NamedCommands.registerCommand("ShootIntoAmp", new ShootIntoAmp()); // TODO: Create this command
     // PathPlanner commands
     // TODO: Set this to correct command
     m_autoCommand = new PathPlannerAuto("Leave Left");
@@ -82,11 +106,32 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+    m_driverController.cross()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    m_driverController.triangle().whileTrue(new Climb(lift));
+
+    m_driverController.L1().whileTrue(new IntakeNote(intake));
+    m_driverController.R1().whileTrue(new EjectNote(intake));
+
+    m_driverController.L2().whileTrue(new FireAmp(shooter));
   }
+
+  
+  // /**
+  //  * Use this method to define your trigger->command mappings. Triggers can be created via the
+  //  * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
+  //  * predicate, or via the named factories in {@link
+  //  * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+  //  * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+  //  * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+  //  * joysticks}.
+  //  */
+  // private void configureBindings() {
+
+
+  // }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
