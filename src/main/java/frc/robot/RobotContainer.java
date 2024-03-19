@@ -29,6 +29,7 @@ import frc.robot.commands.Climb;
 import frc.robot.commands.EjectNote;
 import frc.robot.commands.FireAmp;
 import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ShootIntoAmp;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 // import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -74,7 +75,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // PathPlanner Named commands
-    // NamedCommands.registerCommand("ShootIntoAmp", new ShootIntoAmp()); // TODO: Create this command
+    NamedCommands.registerCommand("ShootIntoAmp", new ShootIntoAmp(shooter)); // TODO: Create this command
     // PathPlanner commands
     // TODO: Set this to correct command
     m_autoCommand = new PathPlannerAuto("Leave Left");
