@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.Ports;
+import frc.robot.Constants.CANIds;
 // import frc.robot.commands.ManualDrive;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Intake;
@@ -60,10 +60,10 @@ public class RobotContainer {
   // The driver's controller
   CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
 
-  private final VictorSPX intakeMotor = new VictorSPX(Ports.kIntakeMotorPort);
-  private final VictorSPX leftShooterMotor = new VictorSPX(Ports.kLeftShooterMotor);
-  private final VictorSPX rightShooterMotor = new VictorSPX(Ports.kRightShooterMotor);
-  private final CANSparkMax liftMotor = new CANSparkMax(Ports.kRightShooterMotor, MotorType.kBrushless);
+  private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotorPort);
+  private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
+  private final VictorSPX rightShooterMotor = new VictorSPX(CANIds.kRightShooterMotor);
+  private final CANSparkMax liftMotor = new CANSparkMax(CANIds.kRightShooterMotor, MotorType.kBrushless);
 
   private final Intake intake = new Intake(intakeMotor);
   private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
