@@ -29,6 +29,7 @@ public class MAXSwerveModule {
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+  private boolean m_offsetByPlusRightAngle;
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
@@ -36,9 +37,12 @@ public class MAXSwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
+  public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset, boolean driveInverted, boolean offsetByPlusRightAngle) {
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
+
+    m_drivingSparkMax.setInverted(driveInverted);
+    m_offsetByPlusRightAngle = offsetByPlusRightAngle;
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
@@ -106,7 +110,7 @@ public class MAXSwerveModule {
     m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
-    m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
+    m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition() + (m_offsetByPlusRightAngle ? Math.PI/2 : 0));
     m_drivingEncoder.setPosition(0);
   }
 
@@ -119,7 +123,7 @@ public class MAXSwerveModule {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
     return new SwerveModuleState(m_drivingEncoder.getVelocity(),
-        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
+        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset + (m_offsetByPlusRightAngle ? Math.PI/2 : 0)));
   }
 
   /**
@@ -132,7 +136,7 @@ public class MAXSwerveModule {
     // relative to the chassis.
     return new SwerveModulePosition(
         m_drivingEncoder.getPosition(),
-        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
+        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset + (m_offsetByPlusRightAngle ? Math.PI/2 : 0)));
   }
 
   /**
@@ -148,7 +152,7 @@ public class MAXSwerveModule {
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
     SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-        new Rotation2d(m_turningEncoder.getPosition()));
+        new Rotation2d(m_turningEncoder.getPosition() + (m_offsetByPlusRightAngle ? Math.PI/2 : 0)));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);

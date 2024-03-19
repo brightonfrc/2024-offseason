@@ -56,7 +56,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getR2Axis(), OIConstants.kDriveDeadband), // Weirdly this gets right stick X
                 true, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
