@@ -125,7 +125,6 @@ public class DriveSubsystem extends SubsystemBase {
    * @param speeds
    */
   public void driveRobotRelative(ChassisSpeeds speeds) {
-    System.out.println("Drive @ " + speeds.toString());
     // TODO: See if rate limiting is better removed.
     chassisSpeeds = speeds;
     drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false, true);
@@ -181,6 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+    System.out.println("Drive @ x" + xSpeed + " y" + ySpeed + "rot" + rot);
     SmartDashboard.putNumber("Swerve/xSpeed", xSpeed);
     SmartDashboard.putNumber("Swerve/ySpeed", ySpeed);
     SmartDashboard.putNumber("Swerve/rot", rot);

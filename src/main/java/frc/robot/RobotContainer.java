@@ -66,32 +66,32 @@ public class RobotContainer {
   // The driver's controller
   CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
 
-  // private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
-  // private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
-  // private final VictorSPX rightShooterMotor = new VictorSPX(CANIds.kRightShooterMotor);
-  // private final CANSparkMax liftMotor = new CANSparkMax(12/*CANIds.kLiftMotor*/, MotorType.kBrushless);
+  private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
+  private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
+  private final VictorSPX rightShooterMotor = new VictorSPX(CANIds.kRightShooterMotor);
+  private final CANSparkMax liftMotor = new CANSparkMax(12/*CANIds.kLiftMotor*/, MotorType.kBrushless);
 
-  // private final Intake intake = new Intake(intakeMotor);
-  // private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
-  // private final Lift lift = new Lift(liftMotor);
+  private final Intake intake = new Intake(intakeMotor);
+  private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
+  private final Lift lift = new Lift(liftMotor);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // intakeMotor.setInverted(true);
-    // leftShooterMotor.setInverted(true);
-    // rightShooterMotor.setInverted(true);
+    intakeMotor.setInverted(true);
+    leftShooterMotor.setInverted(true);
+    rightShooterMotor.setInverted(true);
 
     System.out.println("Hello World");
     // PathPlanner Named commands
-    // NamedCommands.registerCommand("ShootIntoAmp", ParallelCommandGroup(new FireAmpTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
-    // NamedCommands.registerCommand("ShootIntoSpeaker", ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
-    // NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
+    NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
+    NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
 
     // PathPlanner commands
     // TODO: Set this to correct command
-    m_autoCommand = new PathPlannerAuto("Leave Right");
+    m_autoCommand = new PathPlannerAuto("Speaker 2 Notes");
 
     // Configure the button bindings
     configureButtonBindings();
@@ -102,9 +102,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * 0.3,
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * 0.3,
-                -MathUtil.applyDeadband(m_driverController.getR2Axis(), OIConstants.kDriveDeadband), // Weirdly this gets right stick X
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * 0.5,
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * 0.5,
+                -MathUtil.applyDeadband(m_driverController.getR2Axis(), OIConstants.kDriveDeadband) * 0.5, // Weirdly this gets right stick X
                 true, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
@@ -125,14 +125,14 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    // m_driverController.triangle().onTrue(new Climb(lift, false));
-    // m_driverController.circle().onTrue(new Climb(lift, true));
+    m_driverController.triangle().onTrue(new Climb(lift, false));
+    m_driverController.circle().onTrue(new Climb(lift, true));
 
-    // m_driverController.L1().whileTrue(new IntakeNote(intake));
-    // m_driverController.R1().whileTrue(new EjectNote(intake));
+    m_driverController.L1().whileTrue(new IntakeNote(intake));
+    m_driverController.R1().whileTrue(new EjectNote(intake));
 
-    // m_driverController.L2().whileTrue(new ParallelCommandGroup(new FireSpeaker(shooter), new IntakeNote(intake)));
-    // m_driverController.R2().whileTrue(new ParallelCommandGroup(new FireAmp(shooter), new IntakeNote(intake)));
+    m_driverController.L2().whileTrue(new ParallelCommandGroup(new FireSpeaker(shooter), new IntakeNote(intake)));
+    m_driverController.R2().whileTrue(new ParallelCommandGroup(new FireAmp(shooter), new IntakeNote(intake)));
   }
 
   
