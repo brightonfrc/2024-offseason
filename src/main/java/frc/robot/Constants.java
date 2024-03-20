@@ -24,6 +24,10 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+  public static class ShootTimings{
+    public static final double AmpShotRunTime=3000;
+  }
+
   public static class CANIds {
 
     public static int kLeftShooterMotor = 11;

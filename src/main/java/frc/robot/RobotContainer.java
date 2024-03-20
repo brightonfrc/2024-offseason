@@ -79,6 +79,7 @@ public class RobotContainer {
     // PathPlanner Named commands
     NamedCommands.registerCommand("ShootIntoAmp", new FireAmpTimeLimited(shooter));
     NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
+
     // PathPlanner commands
     // TODO: Set this to correct command
     m_autoCommand = new PathPlannerAuto("Speaker");

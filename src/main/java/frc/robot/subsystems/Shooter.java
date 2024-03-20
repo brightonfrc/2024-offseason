@@ -22,6 +22,11 @@ public class Shooter extends SubsystemBase {
     leftShooter.set(ControlMode.PercentOutput, 0.5);
     rightShooter.set(ControlMode.PercentOutput, 0.5);
   }
+  public void shootSpeaker(){
+    //setting speaker shot to 100% power
+    leftShooter.set(ControlMode.PercentOutput, 1);
+    rightShooter.set(ControlMode.PercentOutput, 1);
+  }
   public void stopRunning(){
     leftShooter.set(ControlMode.PercentOutput,0);
     rightShooter.set(ControlMode.PercentOutput,0);
