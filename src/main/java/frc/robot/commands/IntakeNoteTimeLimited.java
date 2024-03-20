@@ -42,7 +42,6 @@ public class IntakeNoteTimeLimited extends Command {
   @Override
   public void execute() {
     System.out.println("IntakeNoteTimeLimited Exec");
-    //running intake at 50% power
     intake.runIntake(1);
   }
 

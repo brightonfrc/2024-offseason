@@ -43,7 +43,6 @@ public class FireSpeakerTimeLimited extends Command {
   @Override
   public void execute() {
     System.out.println("FireSpeakerTimeLimited Exec");
-    //running intake at 50% power
     shooter.shootSpeaker();
   }
 

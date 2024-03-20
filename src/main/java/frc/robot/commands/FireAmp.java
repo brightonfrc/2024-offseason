@@ -35,7 +35,6 @@ public class FireAmp extends Command {
   @Override
   public void execute() {
     System.out.println("FireAmp Exec");
-    //running intake at 50% power
     shooter.shootAmp();
   }
 

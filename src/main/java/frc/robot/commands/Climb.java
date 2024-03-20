@@ -4,15 +4,8 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.LiftConstants;
-import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Lift;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMax; 
-import com.revrobotics.REVLibError;
-
-import edu.wpi.first.math.controller.PIDController;
 
 /** An example command that uses an example subsystem. */
 public class Climb extends Command {
@@ -53,6 +46,7 @@ public class Climb extends Command {
   @Override
   public void end(boolean interrupted) {
     System.out.println("Climb End");
+    lift.setSpeed(0);
   }
 
   // Returns true when the command should end.
