@@ -108,7 +108,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   // --- Specifically for PathPlanner ---
-  ChassisSpeeds chassisSpeeds;
+  ChassisSpeeds chassisSpeeds = new ChassisSpeeds(0,0,0);
 
   /**
    * Returns the current ChassisSpeeds object representing this drivetrain.
@@ -125,6 +125,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param speeds
    */
   public void driveRobotRelative(ChassisSpeeds speeds) {
+    System.out.println("Drive @ " + speeds.toString());
     // TODO: See if rate limiting is better removed.
     chassisSpeeds = speeds;
     drive(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond, false, true);
