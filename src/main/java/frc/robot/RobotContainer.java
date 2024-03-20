@@ -30,6 +30,7 @@ import frc.robot.commands.EjectNote;
 import frc.robot.commands.FireAmp;
 import frc.robot.commands.FireAmpTimeLimited;
 import frc.robot.commands.IntakeNote;
+import frc.robot.commands.IntakeNoteTimeLimited;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 // import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -74,11 +75,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    System.out.println("Hello World");
     // PathPlanner Named commands
     NamedCommands.registerCommand("ShootIntoAmp", new FireAmpTimeLimited(shooter));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
     // PathPlanner commands
     // TODO: Set this to correct command
-    m_autoCommand = new PathPlannerAuto("Leave Left");
+    m_autoCommand = new PathPlannerAuto("Speaker");
 
     // Configure the button bindings
     configureButtonBindings();
@@ -107,11 +110,12 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    System.out.println("Configure Button Bindings");
     m_driverController.cross()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.triangle().whileTrue(new Climb(lift));
+    m_driverController.triangle().onTrue(new Climb(lift));
 
     m_driverController.L1().whileTrue(new IntakeNote(intake));
     m_driverController.R1().whileTrue(new EjectNote(intake));

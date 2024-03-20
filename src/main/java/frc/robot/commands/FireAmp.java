@@ -27,11 +27,14 @@ public class FireAmp extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("FireAmp Initialise");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("FireAmp Exec");
     //running intake at 50% power
     shooter.shootAmp();
   }
@@ -39,6 +42,7 @@ public class FireAmp extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("FireAmp End");
     shooter.stopRunning();
   }
 

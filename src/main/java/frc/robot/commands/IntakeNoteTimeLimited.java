@@ -4,57 +4,58 @@
 
 package frc.robot.commands;
 
-import frc.robot.Constants.LiftConstants;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.Constants.AutoConstants;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Lift;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkMax; 
-import com.revrobotics.REVLibError;
 
-import edu.wpi.first.math.controller.PIDController;
+
 
 /** An example command that uses an example subsystem. */
-public class Climb extends Command {
+public class IntakeNoteTimeLimited extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Lift lift;
-  private PIDController controller;
+  private final Intake intake;
+
+  /**
+   * When this command started, in milliseconds. 
+   */
+  private long startTimeMillis = 0;
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Climb (Lift lift) {
-    this.lift = lift;
+  public IntakeNoteTimeLimited(Intake intake) {
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(lift);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Climb Initialise");
-    controller = new PIDController(LiftConstants.kP, LiftConstants.kI, LiftConstants.kD);
-    controller.setTolerance(LiftConstants.kTolerance);
-    controller.setSetpoint(LiftConstants.kSetpoint);
+    System.out.println("IntakeNoteTimeLimited Initialise");
+    this.startTimeMillis = System.currentTimeMillis();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Climb Exec");
-    lift.setClimbMotor(controller.calculate(lift.getRotations()));
+    System.out.println("IntakeNoteTimeLimited Exec");
+    //running intake at 50% power
+    intake.runIntake(0.5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Climb End");
+    System.out.println("IntakeNoteTimeLimited End");
+    intake.runIntake(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return controller.atSetpoint();
+    return (System.currentTimeMillis() - this.startTimeMillis) >= AutoConstants.kIntakeDurationMillis;
   }
 }

@@ -27,11 +27,14 @@ public class EjectNote extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("EjectNote Initialise");
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("EjectNote Exec");
     //running intake at 50% power
     intake.runIntake(-0.5);
   }
@@ -39,6 +42,7 @@ public class EjectNote extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("EjectNote End");
     intake.runIntake(0);
   }
 

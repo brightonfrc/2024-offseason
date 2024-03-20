@@ -18,7 +18,7 @@ public class FireAmpTimeLimited extends Command {
   /**
    * When this command started, in milliseconds. 
    */
-  private final long startTimeMillis;
+  private long startTimeMillis = 0;
 
   /**
    * Creates a new ExampleCommand.
@@ -27,7 +27,6 @@ public class FireAmpTimeLimited extends Command {
    */
   public FireAmpTimeLimited(Shooter shooter) {
     this.shooter = shooter;
-    this.startTimeMillis = System.currentTimeMillis();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
@@ -35,11 +34,15 @@ public class FireAmpTimeLimited extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("FireAmpTimeLimited Initialise");
+    this.startTimeMillis = System.currentTimeMillis();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("FireAmpTimeLimited Exec");
     //running intake at 50% power
     shooter.shootAmp();
   }
@@ -47,6 +50,7 @@ public class FireAmpTimeLimited extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("FireAmpTimeLimited End");
     shooter.stopRunning();
   }
 

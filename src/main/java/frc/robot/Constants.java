@@ -26,10 +26,9 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class CANIds {
 
-    public static int kIntakeMotorPort=9;
-    public static int kLeftShooterMotor=10;
-    public static int kRightShooterMotor=11;
-
+    public static int kLeftShooterMotor = 11;
+    public static int kRightShooterMotor = 10;
+    public static int kIntakeMotorPort = 9;
     public static int kLiftMotor = 12;
     }
 
@@ -169,6 +168,7 @@ public final class Constants {
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
     public static final long kShooterDurationMillis = 1000; // 1 second
+    public static long kIntakeDurationMillis = 1000; // 1 second
   }
 
   public static final class NeoMotorConstants {
