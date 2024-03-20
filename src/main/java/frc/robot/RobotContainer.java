@@ -34,6 +34,7 @@ import frc.robot.commands.FireSpeaker;
 import frc.robot.commands.FireSpeakerTimeLimited;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeNoteTimeLimited;
+import frc.robot.commands.SlowDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -75,6 +76,8 @@ public class RobotContainer {
   private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
   private final Lift lift = new Lift(liftMotor);
 
+  public boolean slowed = false;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -101,9 +104,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * 0.2,
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * 0.2,
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * 0.025, // Weirdly this gets right stick X
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (slowed ? 0.1 : 0.2),
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (slowed ? 0.1 : 0.2),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * (slowed ? 0.0125 : 0.025), // Weirdly this gets right stick X
                 true, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
@@ -126,6 +129,8 @@ public class RobotContainer {
             m_robotDrive));
     m_driverController.triangle().whileTrue(new Climb(lift, false));
     m_driverController.circle().whileTrue(new Climb(lift, true));
+
+    m_driverController.square().whileTrue(new SlowDrivetrain(this));
 
     m_driverController.L1().whileTrue(new IntakeNote(intake));
     m_driverController.R1().whileTrue(new EjectNote(intake));
