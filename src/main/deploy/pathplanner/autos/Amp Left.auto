@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.8,
+      "y": 7.0
+    },
+    "rotation": -88.51714725724035
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Left Before"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIntoAmp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp After"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
