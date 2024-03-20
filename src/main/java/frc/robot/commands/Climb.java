@@ -18,7 +18,6 @@ import edu.wpi.first.math.controller.PIDController;
 public class Climb extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Lift lift;
-  private PIDController controller;
   private boolean reverse;
 
   /**
@@ -37,20 +36,17 @@ public class Climb extends Command {
   @Override
   public void initialize() {
     System.out.println("Climb Initialise");
-    controller = new PIDController(LiftConstants.kP, LiftConstants.kI, LiftConstants.kD);
-    controller.setTolerance(LiftConstants.kTolerance);
-    if(reverse) {
-      controller.setSetpoint(-LiftConstants.kSetpoint);
-    } else {
-      controller.setSetpoint(LiftConstants.kSetpoint);
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     System.out.println("Climb Exec");
-    lift.setClimbMotor(controller.calculate(lift.getRotations()));
+    if(this.reverse) {
+      lift.setSpeed(-0.15);
+    } else {
+      lift.setSpeed(0.15);
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -62,6 +58,6 @@ public class Climb extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return controller.atSetpoint();
+    return false;
   }
 }

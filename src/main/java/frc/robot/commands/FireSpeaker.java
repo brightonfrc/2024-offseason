@@ -35,8 +35,7 @@ public class FireSpeaker extends Command {
   @Override
   public void execute() {
     System.out.println("FireSpeaker Exec");
-    //running intake at 50% power
-    shooter.shootAmp();
+    shooter.shootSpeaker();
   }
 
   // Called once the command ends or is interrupted.

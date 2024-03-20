@@ -23,12 +23,8 @@ public class Lift extends SubsystemBase {
     this.motor.setIdleMode(IdleMode.kBrake);
   }
 
-  public void setClimbMotor(double speed) {
+  public void setSpeed(double speed) {
     motor.set(speed);
-  }
-
-  public double getRotations() {
-    return encoder.getPosition();
   }
 
   @Override

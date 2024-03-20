@@ -36,7 +36,7 @@ public class IntakeNote extends Command {
   public void execute() {
     System.out.println("IntakeNote Exec");
     //running intake at 50% power
-    intake.runIntake(0.5);
+    intake.runIntake(1);
   }
 
   // Called once the command ends or is interrupted.

@@ -80,7 +80,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     intakeMotor.setInverted(true);
-    leftShooterMotor.setInverted(true);
     rightShooterMotor.setInverted(true);
 
     System.out.println("Hello World");
@@ -104,7 +103,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * 0.5,
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * 0.5,
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * 0.5, // Weirdly this gets right stick X
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * 0.025, // Weirdly this gets right stick X
                 true, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
@@ -125,8 +124,8 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.triangle().onTrue(new Climb(lift, false));
-    m_driverController.circle().onTrue(new Climb(lift, true));
+    m_driverController.triangle().whileTrue(new Climb(lift, false));
+    m_driverController.circle().whileTrue(new Climb(lift, true));
 
     m_driverController.L1().whileTrue(new IntakeNote(intake));
     m_driverController.R1().whileTrue(new EjectNote(intake));
