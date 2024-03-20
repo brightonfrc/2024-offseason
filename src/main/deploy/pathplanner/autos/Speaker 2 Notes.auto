@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ShootIntoAmp"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Speaker 1"

@@ -32,40 +32,14 @@ public final class Constants {
 
     public static int kLeftShooterMotor = 11;
     public static int kRightShooterMotor = 10;
-    public static int kIntakeMotorPort = 9;
+    public static int kIntakeMotor = 9;
     public static int kLiftMotor = 12;
     }
-
-  public static class MotorConstants{
-    public static double distancePerRotation=100;
-    public static double movementPerRotation=400;
-  }
-  
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-    public static final int snapButtonNum=1;
-  }
-
-  public static class PIDConstants {
-    public static final double kDrivetrainP = 0.1;
-    public static final double kDrivetrainI = 0.0;
-    public static final double kDrivetrainD = 0.0;
-    public static final double kRobotTurningP=0.15;
-    public static final double kRobotTurningI=0.0;
-    public static final double kRobotTurningD=0.0;
-    public static final double snapMotorP = 0.2;
-    public static final double snapMotorI = 0.2;
-    public static final double snapMotorD = 0.0;
-  }
-  public static class SnapConstants{
-    public static final double snapAngleTolerance=1.0;
-    public static final double snapBearingTolerance=2.0;
-  }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
-    public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+    public static final double kMaxSpeedMetersPerSecond = 1.5;
+    public static final double kMaxAngularSpeed = 0.7 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)

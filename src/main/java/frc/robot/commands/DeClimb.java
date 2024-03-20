@@ -15,19 +15,16 @@ import com.revrobotics.REVLibError;
 import edu.wpi.first.math.controller.PIDController;
 
 /** An example command that uses an example subsystem. */
-public class Climb extends Command {
+public class DeClimb extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Lift lift;
   private PIDController controller;
-  private boolean reverse;
-
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public Climb (Lift lift, boolean reverse) {
-    this.reverse = reverse;
+  public DeClimb (Lift lift) {
     this.lift = lift;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(lift);
@@ -36,27 +33,23 @@ public class Climb extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Climb Initialise");
+    System.out.println("DeClimb Initialise");
     controller = new PIDController(LiftConstants.kP, LiftConstants.kI, LiftConstants.kD);
     controller.setTolerance(LiftConstants.kTolerance);
-    if(reverse) {
-      controller.setSetpoint(-LiftConstants.kSetpoint);
-    } else {
-      controller.setSetpoint(LiftConstants.kSetpoint);
-    }
+    controller.setSetpoint(-LiftConstants.kSetpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Climb Exec");
+    System.out.println("DeClimb Exec");
     lift.setClimbMotor(controller.calculate(lift.getRotations()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Climb End");
+    System.out.println("DeClimb End");
   }
 
   // Returns true when the command should end.
