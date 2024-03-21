@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.GameSetup;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.CANIds;
 // import frc.robot.commands.ManualDrive;
@@ -48,8 +49,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.List;
 
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
-// import com.pathplanner.lib.auto.NamedCommands;
-// import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 
@@ -62,7 +63,7 @@ import com.revrobotics.CANSparkMax;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  // private final PathPlannerAuto m_autoCommand;
+  private final PathPlannerAuto m_autoCommand;
 
   // The driver's controller
   CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
@@ -87,13 +88,13 @@ public class RobotContainer {
 
     System.out.println("Hello World");
     // PathPlanner Named commands
-    // NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
-    // NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
-    // NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
+    NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
+    NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
+    NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
 
     // PathPlanner commands
     // TODO: Set this to correct command
-    // m_autoCommand = new PathPlannerAuto("Speaker 2 Notes");
+    m_autoCommand = new PathPlannerAuto(GameSetup.pathPlannerAutoStrategy);
 
     // Configure the button bindings
     configureButtonBindings();
@@ -107,7 +108,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (slowed ? 0.2 : 1),
                 /* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (slowed ? 0.2 : 1),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * (slowed ? 0.0125 : 0.025), // Weirdly this gets right stick X
-                true, true),
+                GameSetup.isFieldRelative, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
   }
@@ -160,9 +161,9 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake));
+    // return new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake));
     
-    // return m_autoCommand;
+    return m_autoCommand;
 
 
     // // Create config for trajectory

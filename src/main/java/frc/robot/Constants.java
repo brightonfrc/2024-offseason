@@ -24,16 +24,18 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class ShootTimings{
-    public static final double AmpShotRunTime=3000;
+  public static class GameSetup {
+    public static final double startAngleOffset = 0; // Radians
+    public static final boolean isFieldRelative = true; // true: field relative; false: robot relative
+    public static final String pathPlannerAutoStrategy = "Amp Left";
   }
 
   public static class CANIds {
 
-    public static int kLeftShooterMotor = 11;
-    public static int kRightShooterMotor = 10;
-    public static int kIntakeMotor = 9;
-    public static int kLiftMotor = 12;
+    public static final int kLeftShooterMotor = 11;
+    public static final int kRightShooterMotor = 10;
+    public static final int kIntakeMotor = 9;
+    public static final int kLiftMotor = 12;
     }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -63,7 +65,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 1;
+    public static final int kFrontLeftDrivingCanId = 13;
     public static final int kFrontLeftTurningCanId = 2;
     public static final int kFrontRightDrivingCanId = 7;
     public static final int kFrontRightTurningCanId = 8;
