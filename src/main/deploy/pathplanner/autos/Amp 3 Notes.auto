@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.37,
-      "y": 5.53
+      "x": 0.8,
+      "y": 7.0
     },
     "rotation": 0
   },
@@ -14,25 +14,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Speaker 1"
+            "pathName": "Amp Left Before"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootIntoSpeaker"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Speaker 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IntakeNote"
+            "name": "ShootIntoAmp"
           }
         },
         {
@@ -44,7 +32,43 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootIntoSpeaker"
+            "name": "IntakeNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Pickup 1 Back"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootIntoAmp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Pickup 2 Forward"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeNote"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp Pickup 2 Back"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Amp After"
           }
         }
       ]
