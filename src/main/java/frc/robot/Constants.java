@@ -25,9 +25,9 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class GameSetup {
-    public static final double startAngleOffset = 0; // Radians
-    public static final boolean isFieldRelative = true; // true: field relative; false: robot relative
-    public static final String pathPlannerAutoStrategy = "Amp Left";
+    public static final double startAngleOffset = 0; // Degrees
+    public static final boolean isFieldRelative = false; // true: field relative; false: robot relative
+    public static final String pathPlannerAutoStrategy = "Speaker 1 Note Right";
   }
 
   public static class CANIds {
@@ -147,8 +147,8 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
-    public static final long kShooterDurationMillis = 1000; // 1 second
-    public static long kIntakeDurationMillis = 1000; // 1 second
+    public static final long kShooterDurationMillis = 3500; // 1.5s without intake then 2 seconds with it
+    public static long kIntakeDurationMillis = 2000; // 2 seconds
   }
 
   public static final class NeoMotorConstants {

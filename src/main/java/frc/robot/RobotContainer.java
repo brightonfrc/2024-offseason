@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -88,8 +89,8 @@ public class RobotContainer {
 
     System.out.println("Hello World");
     // PathPlanner Named commands
-    NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
-    NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new IntakeNoteTimeLimited(intake)));
+    NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new SequentialCommandGroup(new WaitCommand(1.5), new IntakeNoteTimeLimited(intake))));
+    NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new SequentialCommandGroup(new WaitCommand(1.5), new IntakeNoteTimeLimited(intake))));
     NamedCommands.registerCommand("IntakeNote", new IntakeNoteTimeLimited(intake));
 
     // PathPlanner commands
@@ -105,12 +106,21 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband) * (slowed ? 0.2 : 1),
-                /* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband) * (slowed ? 0.2 : 1),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband) * (slowed ? 0.0125 : 0.025), // Weirdly this gets right stick X
+                processDriveInput(/* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
+                processDriveInput(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
+                processDriveInput(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)) * (slowed ? 0.0125 : 0.025), // Weirdly this gets right stick X
                 GameSetup.isFieldRelative, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
+  }
+
+  private double processDriveInput(double input) {
+    // Make a joystick input input become a swerve input value
+    if(input < 0) {
+      return -Math.pow(input, 2);
+    } else {
+      return Math.pow(input, 2);
+    }
   }
 
   /**
@@ -136,8 +146,8 @@ public class RobotContainer {
     m_driverController.L1().whileTrue(new IntakeNote(intake));
     m_driverController.R1().whileTrue(new EjectNote(intake));
 
-    m_driverController.L2().whileTrue(new ParallelCommandGroup(new FireSpeaker(shooter), new IntakeNote(intake)));
-    m_driverController.R2().whileTrue(new ParallelCommandGroup(new FireAmp(shooter), new IntakeNote(intake)));
+    m_driverController.L2().whileTrue(new FireSpeaker(shooter));
+    m_driverController.R2().whileTrue(new FireAmp(shooter));
   }
 
   
