@@ -147,7 +147,7 @@ public final class Constants {
     public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
 
-    public static final long kShooterDurationMillis = 3500; // 1.5s without intake then 2 seconds with it
+    public static final long kShooterDurationMillis = 5000; // 3s without intake then 2 seconds with it
     public static long kIntakeDurationMillis = 2000; // 2 seconds
   }
 

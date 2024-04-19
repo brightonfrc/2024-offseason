@@ -108,7 +108,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 processDriveInput(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
                 processDriveInput(/* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
-                processDriveInput(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)) * (slowed ? 0.0125 : 0.025), // Weirdly this gets right stick X
+                processDriveInput(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)) * (slowed ? 0.009375 : 0.025), // Weirdly this gets right stick X
                 GameSetup.isFieldRelative, true),
             m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
