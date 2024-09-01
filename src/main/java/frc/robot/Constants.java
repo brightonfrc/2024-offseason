@@ -37,6 +37,13 @@ public final class Constants {
     public static final int kIntakeMotor = 9;
     public static final int kLiftMotor = 12;
     }
+  public static final class FieldOrientedDriveConstants{
+    public static final double kFODP = 0.1;
+    public static final double kFODI = 0.0;
+    public static final double kFODD = 0.1;
+    //Maximum rotation speed
+    public static final double rotationScalar = Math.PI;
+  }
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds

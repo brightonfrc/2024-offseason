@@ -29,13 +29,13 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.commands.Climb;
 import frc.robot.commands.EjectNote;
 import frc.robot.commands.FireAmp;
-import frc.robot.commands.FireAmp;
 import frc.robot.commands.FireAmpTimeLimited;
 import frc.robot.commands.FireSpeaker;
 import frc.robot.commands.FireSpeakerTimeLimited;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.IntakeNoteTimeLimited;
 import frc.robot.commands.SlowDrivetrain;
+import frc.robot.commands.FieldOrientedDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -101,17 +101,18 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
-            () -> m_robotDrive.drive(
-                processDriveInput(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
-                processDriveInput(/* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
-                processDriveInput(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)) * (slowed ? 0.009375 : 0.025), // Weirdly this gets right stick X
-                GameSetup.isFieldRelative, true),
-            m_robotDrive));
+    // m_robotDrive.setDefaultCommand(
+    //     // The left stick controls translation of the robot.
+    //     // Turning is controlled by the X axis of the right stick.
+    //     new RunCommand(
+    //         () -> m_robotDrive.drive(
+    //             processDriveInput(-MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
+    //             processDriveInput(/* Maybe remove - */-MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband)) * (slowed ? 0.2 : 1),
+    //             processDriveInput(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband)) * (slowed ? 0.009375 : 0.025), // Weirdly this gets right stick X
+    //             GameSetup.isFieldRelative, true),
+    //         m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
+      m_robotDrive.setDefaultCommand(new FieldOrientedDrive(m_robotDrive, m_driverController));
   }
 
   private double processDriveInput(double input) {
