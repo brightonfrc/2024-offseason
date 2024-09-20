@@ -86,13 +86,13 @@ public class FieldOrientedDrive extends Command {
         joystickMoveMagnitude=Math.pow(Math.pow(ps4Controller.getLeftX(),2)+Math.pow(ps4Controller.getLeftY(),2), 0.5);
         SmartDashboard.putNumber("Left joystick magnitude", joystickMoveMagnitude);
 
-        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*Constants.TestingConstants.maximumSpeed;
+        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("xSpeed", xSpeed);
 
-        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*Constants.TestingConstants.maximumSpeed;
+        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("ySpeed", ySpeed);
 
-        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*Constants.TestingConstants.maximumSpeed;
+        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
         driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
