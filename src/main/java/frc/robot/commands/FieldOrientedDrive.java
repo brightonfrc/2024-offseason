@@ -5,7 +5,9 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.Constants;
 import frc.robot.Constants.FieldOrientedDriveConstants;
+import frc.robot.Constants.TestingConstants;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -58,13 +60,14 @@ public class FieldOrientedDrive extends Command {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        SmartDashboard.putNumber("Goal bearing", goalBearing);
 
         // I can't remember which one of the joysticks were swapped
         joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getRightX());
         SmartDashboard.putNumber("Right Joystick bearing", joystickTurnBearing);
 
         //error tolerance of 2 degrees
-        if (Math.abs(joystickTurnBearing-goalBearing)>Math.PI/90){
+        if (Math.abs(joystickTurnBearing-goalBearing)>Math.PI/180*FieldOrientedDriveConstants.bearingTolerance){
             goalBearing=joystickTurnBearing;
             bearingPIDController.reset();
             bearingPIDController.setSetpoint(goalBearing);
@@ -73,15 +76,25 @@ public class FieldOrientedDrive extends Command {
         //converting to radians
         robotBearing=robotBearing/180*Math.PI;
         SmartDashboard.putNumber("Robot bearing", robotBearing);
+
         joystickMoveBearing=Math.atan2(ps4Controller.getLeftY(), ps4Controller.getLeftX());
         SmartDashboard.putNumber("Left joystick bearing", joystickMoveBearing);
+
         joystickMoveBearing=joystickMoveBearing-robotBearing;
         SmartDashboard.putNumber("Robot Relative bearing", joystickMoveBearing);
+
         joystickMoveMagnitude=Math.pow(Math.pow(ps4Controller.getLeftX(),2)+Math.pow(ps4Controller.getLeftY(),2), 0.5);
         SmartDashboard.putNumber("Left joystick magnitude", joystickMoveMagnitude);
-        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing);
-        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing);
-        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar;
+
+        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*Constants.TestingConstants.maximumSpeed;
+        SmartDashboard.putNumber("xSpeed", xSpeed);
+
+        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*Constants.TestingConstants.maximumSpeed;
+        SmartDashboard.putNumber("ySpeed", ySpeed);
+
+        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*Constants.TestingConstants.maximumSpeed;
+        SmartDashboard.putNumber("rotSpeed", rotSpeed);
+
         driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
     }
 
