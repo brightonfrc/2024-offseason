@@ -34,7 +34,44 @@ public class DriveCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Do something with magnitude of left joystick of ps4Controller...
+    // Left joystick for speed
+    double leftX = ps4Controller.getLeftX();
+    double leftY = -ps4Controller.getLeftY(); // Invert Y to make forward positive
+    double speed = Math.hypot(leftX, leftY);  // Magnitude of the left joystick
+
+    // Right joystick for bearing
+    double rightX = ps4Controller.getRightX();
+    double rightY = -ps4Controller.getRightY(); // Invert Y to match field orientation
+    double desiredBearing = Math.toDegrees(Math.atan2(rightY, rightX)); // Angle in degrees
+
+    // If the right joystick is near the center, keep the current heading
+    if (Math.hypot(rightX, rightY) < 0.1) { // Deadband for right stick
+        desiredBearing = tankDrivetrainSubsystem.getHeading();
+    }
+
+    // Current heading from NavX
+    double currentHeading = tankDrivetrainSubsystem.getHeading();
+
+    // Calculate the turn power based on heading error
+    double headingError = desiredBearing - currentHeading;
+    headingError = normalizeAngle(headingError); // Normalize to -180 to 180 degrees
+    double turnPower = headingError * 0.02; // Proportional control constant (tune this value)
+
+    // Left and right motor powers for turning and speed
+    double leftPower = speed - turnPower;
+    double rightPower = speed + turnPower;
+
+    // Set power to drivetrain
+    tankDrivetrainSubsystem.SetPower(leftPower, rightPower, leftPower, rightPower);
+  }
+
+  /**
+  * Normalize an angle to the range -180 to 180 degrees.
+  */
+  private double normalizeAngle(double angle) {
+    while (angle > 180) angle -= 360;
+    while (angle < -180) angle += 360;
+    return angle;
   }
 
   // Called once the command ends or is interrupted.
