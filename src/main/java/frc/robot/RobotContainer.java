@@ -79,7 +79,6 @@ public class RobotContainer {
   private final Lift lift = new Lift(liftMotor);
 
   public boolean slowed = false;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -139,8 +138,8 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(), // Circle
             m_robotDrive));
-    m_driverController.triangle().whileTrue(new Climb(lift, false));
-    m_driverController.circle().whileTrue(new Climb(lift, true)); // Square/
+    // m_driverController.triangle().whileTrue(new Climb(lift, false));
+    // m_driverController.circle().whileTrue(new Climb(lift, true)); // Square/
 
     m_driverController.square().whileTrue(new SlowDrivetrain(this)); // Cross
 

@@ -25,7 +25,7 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class TestingConstants{
-    public static final double maximumSpeed=0.1;
+    public static final double maximumSpeed=0.05;
   }
   public static class GameSetup {
     public static final double startAngleOffset = 0; // Degrees
@@ -38,7 +38,7 @@ public final class Constants {
     public static final int kLeftShooterMotor = 11;
     public static final int kRightShooterMotor = 10;
     public static final int kIntakeMotor = 9;
-    public static final int kLiftMotor = 12;
+    // public static final int kLiftMotor = 12;
     }
   public static final class FieldOrientedDriveConstants{
     public static final double kFODP = 0.1;
@@ -78,7 +78,7 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // SPARK MAX CAN IDs
-    public static final int kFrontLeftDrivingCanId = 13;
+    public static final int kFrontLeftDrivingCanId = 1;
     public static final int kFrontLeftTurningCanId = 2;
     public static final int kFrontRightDrivingCanId = 7;
     public static final int kFrontRightTurningCanId = 8;

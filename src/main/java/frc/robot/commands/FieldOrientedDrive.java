@@ -5,7 +5,6 @@
 package frc.robot.commands;
 
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.Constants;
 import frc.robot.Constants.FieldOrientedDriveConstants;
 import frc.robot.Constants.TestingConstants;
 
@@ -62,8 +61,11 @@ public class FieldOrientedDrive extends Command {
     public void execute() {
         SmartDashboard.putNumber("Goal bearing", goalBearing);
 
-        // I can't remember which one of the joysticks were swapped
-        joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getRightX());
+        //The right joystick is completely borked, where the R2Axis gets the X Axis displacement of the right joystick
+
+        //Both joysticks assumes the right to be bearing 0 and then works clockwise from there. To have bearing 0 be in front, the bearing
+        //has to be moved back by 90 degrees/ 1/2 PI
+        joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getR2Axis())+Math.PI/2;
         SmartDashboard.putNumber("Right Joystick bearing", joystickTurnBearing);
 
         //error tolerance of 2 degrees
@@ -77,7 +79,7 @@ public class FieldOrientedDrive extends Command {
         robotBearing=robotBearing/180*Math.PI;
         SmartDashboard.putNumber("Robot bearing", robotBearing);
 
-        joystickMoveBearing=Math.atan2(ps4Controller.getLeftY(), ps4Controller.getLeftX());
+        joystickMoveBearing=Math.atan2(ps4Controller.getLeftY(), ps4Controller.getLeftX())+Math.PI/2;
         SmartDashboard.putNumber("Left joystick bearing", joystickMoveBearing);
 
         joystickMoveBearing=joystickMoveBearing-robotBearing;
@@ -95,7 +97,7 @@ public class FieldOrientedDrive extends Command {
         rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
-        driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
+        //driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
     }
 
     // Called once the command ends or is interrupted.
