@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class DriveCommand extends Command {
   private final TankDrivetrainSubsystem tankDrivetrainSubsystem;
   private final PS4Controller ps4Controller;
-  private final PIDController turnPID;
+  private PIDController turnPID;
+  private double oldSetpoint;
 
-  public DriveCommand(TankDrivetrainSubsystem _tankDrivetrainSubsystem, PS4Controller _ps4Controller, PIDController _turnPID) {
+  public DriveCommand(TankDrivetrainSubsystem _tankDrivetrainSubsystem, PS4Controller _ps4Controller) {
     tankDrivetrainSubsystem = _tankDrivetrainSubsystem;
     ps4Controller = _ps4Controller;
-    turnPID = _turnPID;
 
     // Declare subsystem dependencies
     addRequirements(_tankDrivetrainSubsystem);
@@ -23,7 +23,7 @@ public class DriveCommand extends Command {
 
   @Override
   public void initialize() {
-    
+    turnPID = new PIDController(0, 0, 0);
   }
 
   @Override
@@ -38,15 +38,24 @@ public class DriveCommand extends Command {
     double rightY = -ps4Controller.getRightY();
     double desiredBearing = Math.toDegrees(Math.atan2(rightY, rightX)); // Calculate bearing
 
+    if (Math.abs(desiredBearing-oldSetpoint)>10){ // If there is a large enough difference (10°) between the old and new bearings, then make the change
+      turnPID.setSetpoint(desiredBearing);
+      oldSetpoint=desiredBearing;
+      turnPID.reset();
+    }
     // Get current heading
     double currentHeading = tankDrivetrainSubsystem.getHeading();
 
     // Calculate turn power with PID
-    double turnPower = turnPID.calculate(currentHeading, desiredBearing);
+    double turnPower = turnPID.calculate(currentHeading);
 
-    // Calculate motor power
-    double leftPower = speed - turnPower;
-    double rightPower = speed + turnPower;
+    double leftPower = speed;
+    double rightPower = speed;
+
+    if (turnPower != 0){ // If still need to turn, 
+      leftPower = turnPower;
+      rightPower = -turnPower;
+    }
 
     // Set motor power
     tankDrivetrainSubsystem.SetPower(leftPower, rightPower, leftPower, rightPower);
