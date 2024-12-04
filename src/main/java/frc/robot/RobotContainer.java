@@ -69,24 +69,24 @@ public class RobotContainer {
   // The driver's controller
   CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
 
-  private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
-  private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
-  private final VictorSPX rightShooterMotor = new VictorSPX(CANIds.kRightShooterMotor);
-  private final CANSparkMax liftMotor = new CANSparkMax(12/*CANIds.kLiftMotor*/, MotorType.kBrushless);
+  // private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
+  // private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
+  // private final VictorSPX rightShooterMotor = new VictorSPX(CANIds.kRightShooterMotor);
+  // private final CANSparkMax liftMotor = new CANSparkMax(12/*CANIds.kLiftMotor*/, MotorType.kBrushless);
 
-  private final Intake intake = new Intake(intakeMotor);
-  private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
-  private final Lift lift = new Lift(liftMotor);
+  // private final Intake intake = new Intake(intakeMotor);
+  // private final Shooter shooter = new Shooter(leftShooterMotor, rightShooterMotor);
+  // private final Lift lift = new Lift(liftMotor);
 
   public boolean slowed = false;
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    intakeMotor.setInverted(true);
-    rightShooterMotor.setInverted(true);
+    // intakeMotor.setInverted(true);
+    // rightShooterMotor.setInverted(true);
 
-    System.out.println("Hello World");
+    // System.out.println("Hello World");
     // PathPlanner Named commands
     // NamedCommands.registerCommand("ShootIntoAmp", new ParallelCommandGroup(new FireAmpTimeLimited(shooter), new SequentialCommandGroup(new WaitCommand(3.0), new IntakeNoteTimeLimited(intake))));
     // NamedCommands.registerCommand("ShootIntoSpeaker", new ParallelCommandGroup(new FireSpeakerTimeLimited(shooter), new SequentialCommandGroup(new WaitCommand(3.0), new IntakeNoteTimeLimited(intake))));
@@ -134,20 +134,20 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     System.out.println("Configure Button Bindings");
-    m_driverController.cross()
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(), // Circle
-            m_robotDrive));
-    // m_driverController.triangle().whileTrue(new Climb(lift, false));
-    // m_driverController.circle().whileTrue(new Climb(lift, true)); // Square/
+    // m_driverController.cross()
+    //     .whileTrue(new RunCommand(
+    //         () -> m_robotDrive.setX(), // Circle
+    //         m_robotDrive));
+    // // m_driverController.triangle().whileTrue(new Climb(lift, false));
+    // // m_driverController.circle().whileTrue(new Climb(lift, true)); // Square/
 
-    m_driverController.square().whileTrue(new SlowDrivetrain(this)); // Cross
+    // m_driverController.square().whileTrue(new SlowDrivetrain(this)); // Cross
 
-    m_driverController.L1().whileTrue(new IntakeNote(intake));
-    m_driverController.R1().whileTrue(new EjectNote(intake));
+    // m_driverController.L1().whileTrue(new IntakeNote(intake));
+    // m_driverController.R1().whileTrue(new EjectNote(intake));
 
-    m_driverController.L2().whileTrue(new FireSpeaker(shooter));
-    m_driverController.R2().whileTrue(new FireAmp(shooter));
+    // m_driverController.L2().whileTrue(new FireSpeaker(shooter));
+    // m_driverController.R2().whileTrue(new FireAmp(shooter));
   }
 
   
@@ -170,11 +170,11 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    return new ParallelCommandGroup(
-      new FireSpeakerTimeLimited(shooter),
-      new SequentialCommandGroup(new WaitCommand(3.0), new IntakeNoteTimeLimited(intake)
-    ));
+  // public Command getAutonomousCommand() {
+  //   return new ParallelCommandGroup(
+  //     new FireSpeakerTimeLimited(shooter),
+  //     new SequentialCommandGroup(new WaitCommand(3.0), new IntakeNoteTimeLimited(intake)
+  //   ));
     
     // return m_autoCommand;
 
@@ -217,5 +217,5 @@ public class RobotContainer {
 
     // // Run path following command, then stop at the end.
     // return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
-  }
+//   }
 }

@@ -54,19 +54,27 @@ public class FieldOrientedDrive extends Command {
         //setting a tolerance of 2 degrees
         bearingPIDController.setTolerance(Math.PI/90);
         bearingPIDController.setSetpoint(0);
+        bearingPIDController.enableContinuousInput(0, 2*Math.PI);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+
+        //The robot refuses to stafe while it is being commanded to turn. 
         SmartDashboard.putNumber("Goal bearing", goalBearing);
 
         //The right joystick is completely borked, where the R2Axis gets the X Axis displacement of the right joystick
 
         //Both joysticks assumes the right to be bearing 0 and then works clockwise from there. To have bearing 0 be in front, the bearing
         //has to be moved back by 90 degrees/ 1/2 PI
-        joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getR2Axis())+Math.PI/2;
-        SmartDashboard.putNumber("Right Joystick bearing", joystickTurnBearing);
+        //If right joystick is not being moved assume bearing to be 0
+        if(Math.hypot(ps4Controller.getRightY(), ps4Controller.getR2Axis())>0.5)
+            {joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getR2Axis())+Math.PI/2;}
+        else{
+            joystickTurnBearing=0;
+        }
+        SmartDashboard.putNumber("Turn: Right Joystick bearing", joystickTurnBearing);
 
         //error tolerance of 2 degrees
         if (Math.abs(joystickTurnBearing-goalBearing)>Math.PI/180*FieldOrientedDriveConstants.bearingTolerance){
@@ -80,13 +88,13 @@ public class FieldOrientedDrive extends Command {
         SmartDashboard.putNumber("Robot bearing", robotBearing);
 
         joystickMoveBearing=Math.atan2(ps4Controller.getLeftY(), ps4Controller.getLeftX())+Math.PI/2;
-        SmartDashboard.putNumber("Left joystick bearing", joystickMoveBearing);
+        SmartDashboard.putNumber("Drive: Left joystick bearing", joystickMoveBearing);
 
         joystickMoveBearing=joystickMoveBearing-robotBearing;
-        SmartDashboard.putNumber("Robot Relative bearing", joystickMoveBearing);
+        SmartDashboard.putNumber("Drive: Robot Relative bearing", joystickMoveBearing);
 
         joystickMoveMagnitude=Math.pow(Math.pow(ps4Controller.getLeftX(),2)+Math.pow(ps4Controller.getLeftY(),2), 0.5);
-        SmartDashboard.putNumber("Left joystick magnitude", joystickMoveMagnitude);
+        SmartDashboard.putNumber("Drive: Left joystick magnitude", joystickMoveMagnitude);
 
         xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("xSpeed", xSpeed);
@@ -97,7 +105,7 @@ public class FieldOrientedDrive extends Command {
         rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
-        //driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
+        driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
     }
 
     // Called once the command ends or is interrupted.
