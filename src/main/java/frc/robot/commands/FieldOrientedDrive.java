@@ -66,6 +66,11 @@ public class FieldOrientedDrive extends Command {
 
         
         joystickTurnBearing=joystick.getTwist();
+        //Twist goes from -1 to 1, so I need to recalibrate it. 
+        joystickTurnBearing=joystickTurnBearing*Math.PI;
+        if (joystickTurnBearing<0){
+            joystickTurnBearing+=2*Math.PI;
+        }
         SmartDashboard.putNumber("Turn: Joystick twist", joystickTurnBearing);
 
         //error tolerance of 2 degrees
@@ -94,12 +99,12 @@ public class FieldOrientedDrive extends Command {
         ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("ySpeed", ySpeed);
 
-        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
+        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumRotationSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
         // Uncomment when joystick drift is resolved
         // driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
-        driveSubsystem.drive(xSpeed,ySpeed, rotSpeed, false, true);
+        driveSubsystem.drive(ySpeed,xSpeed, rotSpeed, false, true);
     }
 
     // Called once the command ends or is interrupted.
