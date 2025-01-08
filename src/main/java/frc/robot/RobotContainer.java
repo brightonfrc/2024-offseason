@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -67,7 +68,7 @@ public class RobotContainer {
   // private final PathPlannerAuto m_autoCommand;
 
   // The driver's controller
-  CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
+  CommandJoystick m_Joystick= new CommandJoystick(OIConstants.kDriverControllerPort);
 
   // private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
   // private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
@@ -111,7 +112,7 @@ public class RobotContainer {
     //             GameSetup.isFieldRelative, true),
     //         m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
-      m_robotDrive.setDefaultCommand(new FieldOrientedDrive(m_robotDrive, m_driverController));
+      m_robotDrive.setDefaultCommand(new FieldOrientedDrive(m_robotDrive, m_Joystick));
   }
 
   private double processDriveInput(double input) {

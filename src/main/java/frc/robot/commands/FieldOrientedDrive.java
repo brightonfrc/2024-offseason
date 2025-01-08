@@ -10,7 +10,7 @@ import frc.robot.Constants.TestingConstants;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -20,7 +20,7 @@ import com.kauailabs.navx.frc.AHRS;
 /** An example command that uses an example subsystem. */
 public class FieldOrientedDrive extends Command {
     private DriveSubsystem driveSubsystem;
-    private CommandPS4Controller ps4Controller;
+    private CommandJoystick joystick;
     private AHRS gyro;
     private PIDController bearingPIDController;
 
@@ -39,9 +39,9 @@ public class FieldOrientedDrive extends Command {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandPS4Controller ps4Controller) {
+    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandJoystick joystick) {
         this.driveSubsystem = driveSubsystem;
-        this.ps4Controller = ps4Controller;
+        this.joystick = joystick;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
     }
@@ -64,17 +64,9 @@ public class FieldOrientedDrive extends Command {
         //The robot refuses to stafe while it is being commanded to turn. 
         SmartDashboard.putNumber("Goal bearing", goalBearing);
 
-        //The right joystick is completely borked, where the R2Axis gets the X Axis displacement of the right joystick
-
-        //Both joysticks assumes the right to be bearing 0 and then works clockwise from there. To have bearing 0 be in front, the bearing
-        //has to be moved back by 90 degrees/ 1/2 PI
-        //If right joystick is not being moved assume bearing to be 0
-        if(Math.hypot(ps4Controller.getRightY(), ps4Controller.getR2Axis())>0.5)
-            {joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getR2Axis())+Math.PI/2;}
-        else{
-            joystickTurnBearing=0;
-        }
-        SmartDashboard.putNumber("Turn: Right Joystick bearing", joystickTurnBearing);
+        
+        joystickTurnBearing=joystick.getTwist();
+        SmartDashboard.putNumber("Turn: Joystick twist", joystickTurnBearing);
 
         //error tolerance of 2 degrees
         if (Math.abs(joystickTurnBearing-goalBearing)>Math.PI/180*FieldOrientedDriveConstants.bearingTolerance){
@@ -87,14 +79,14 @@ public class FieldOrientedDrive extends Command {
         robotBearing=robotBearing/180*Math.PI;
         SmartDashboard.putNumber("Robot bearing", robotBearing);
 
-        joystickMoveBearing=Math.atan2(ps4Controller.getLeftY(), ps4Controller.getLeftX())+Math.PI/2;
-        SmartDashboard.putNumber("Drive: Left joystick bearing", joystickMoveBearing);
+        joystickMoveBearing=joystick.getDirectionRadians();
+        SmartDashboard.putNumber("Drive: Joystick bearing", joystickMoveBearing);
 
         joystickMoveBearing=joystickMoveBearing-robotBearing;
         SmartDashboard.putNumber("Drive: Robot Relative bearing", joystickMoveBearing);
 
-        joystickMoveMagnitude=Math.pow(Math.pow(ps4Controller.getLeftX(),2)+Math.pow(ps4Controller.getLeftY(),2), 0.5);
-        SmartDashboard.putNumber("Drive: Left joystick magnitude", joystickMoveMagnitude);
+        joystickMoveMagnitude=joystick.getMagnitude();
+        SmartDashboard.putNumber("Drive: Joystick magnitude", joystickMoveMagnitude);
 
         xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("xSpeed", xSpeed);
@@ -105,7 +97,9 @@ public class FieldOrientedDrive extends Command {
         rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
-        driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
+        // Uncomment when joystick drift is resolved
+        // driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
+        driveSubsystem.drive(xSpeed,ySpeed, rotSpeed, false, true);
     }
 
     // Called once the command ends or is interrupted.
