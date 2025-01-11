@@ -32,6 +32,9 @@ public class FieldOrientedDrive extends Command {
     private double rotSpeed;
     private double xSpeed;
     private double ySpeed;
+    private Boolean slowMode;
+    private double maximumRotationSpeed;
+    private double maximumSpeed;
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     /**
@@ -39,9 +42,10 @@ public class FieldOrientedDrive extends Command {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandJoystick joystick) {
+    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandJoystick joystick, Boolean slowMode) {
         this.driveSubsystem = driveSubsystem;
         this.joystick = joystick;
+        this.slowMode=slowMode;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
     }
@@ -55,22 +59,26 @@ public class FieldOrientedDrive extends Command {
         bearingPIDController.setTolerance(Math.PI/90);
         bearingPIDController.setSetpoint(0);
         bearingPIDController.enableContinuousInput(0, 2*Math.PI);
+        if (slowMode=true){
+            maximumRotationSpeed=TestingConstants.maximumRotationSpeedReduced;
+            maximumSpeed=TestingConstants.maximumSpeedReduced;
+        } else{
+            maximumRotationSpeed=TestingConstants.maximumRotationSpeed;
+            maximumSpeed=TestingConstants.maximumSpeed;
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-
-        //The robot refuses to stafe while it is being commanded to turn. 
+        SmartDashboard.putBoolean("Slow Mode Active", slowMode);
         SmartDashboard.putNumber("Goal bearing", goalBearing);
 
-        
-        joystickTurnBearing=joystick.getTwist();
-        //Twist goes from -1 to 1, so I need to recalibrate it. 
-        joystickTurnBearing=joystickTurnBearing*Math.PI;
-        if (joystickTurnBearing<0){
-            joystickTurnBearing+=2*Math.PI;
-        }
+        //I'm adding one so that the bearing scales from 0 to 180, rather than -90 to 90. 
+        joystickTurnBearing=joystick.getTwist()+1;
+        //Twist goes from -1 to 1, to make it even remotely possible for it to be controlled with any amount of precision, 
+        //I'm limiting the range of rotation to +-90 from origin. 
+        joystickTurnBearing=joystickTurnBearing*Math.PI/2;
         SmartDashboard.putNumber("Turn: Joystick twist", joystickTurnBearing);
 
         //error tolerance of 2 degrees
@@ -93,17 +101,15 @@ public class FieldOrientedDrive extends Command {
         joystickMoveMagnitude=joystick.getMagnitude();
         SmartDashboard.putNumber("Drive: Joystick magnitude", joystickMoveMagnitude);
 
-        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*TestingConstants.maximumSpeed;
+        xSpeed=joystickMoveMagnitude*Math.cos(joystickMoveBearing)*maximumSpeed;
         SmartDashboard.putNumber("xSpeed", xSpeed);
 
-        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*TestingConstants.maximumSpeed;
+        ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*maximumSpeed;
         SmartDashboard.putNumber("ySpeed", ySpeed);
 
-        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumRotationSpeed;
+        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*maximumRotationSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
-        // Uncomment when joystick drift is resolved
-        // driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
         driveSubsystem.drive(ySpeed,xSpeed, rotSpeed, false, true);
     }
 

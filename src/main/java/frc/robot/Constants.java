@@ -25,7 +25,7 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class TestingConstants{
-    public static final double maximumSpeed=0.05;
+    public static final double maximumSpeed=0.10;
     public static final double maximumRotationSpeed=0.0005;
   }
   public static class GameSetup {
