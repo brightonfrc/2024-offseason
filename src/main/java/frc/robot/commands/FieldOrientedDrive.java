@@ -32,6 +32,9 @@ public class FieldOrientedDrive extends Command {
     private double rotSpeed;
     private double xSpeed;
     private double ySpeed;
+    private double maximumRotationSpeed;
+    private double maximumSpeed;
+    private Boolean slowMode;
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
     /**
@@ -39,9 +42,10 @@ public class FieldOrientedDrive extends Command {
      *
      * @param subsystem The subsystem used by this command.
      */
-    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandPS4Controller ps4Controller) {
+    public FieldOrientedDrive(DriveSubsystem driveSubsystem, CommandPS4Controller ps4Controller, Boolean slowMode) {
         this.driveSubsystem = driveSubsystem;
         this.ps4Controller = ps4Controller;
+        this.slowMode=slowMode;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
     }
@@ -55,19 +59,26 @@ public class FieldOrientedDrive extends Command {
         bearingPIDController.setTolerance(Math.PI/90);
         bearingPIDController.setSetpoint(0);
         bearingPIDController.enableContinuousInput(0, 2*Math.PI);
+        if (slowMode=true){
+            maximumRotationSpeed=TestingConstants.maximumRotationSpeedReduced;
+            maximumSpeed=TestingConstants.maximumSpeedReduced;
+        } else{
+            maximumRotationSpeed=TestingConstants.maximumRotationSpeed;
+            maximumSpeed=TestingConstants.maximumSpeed;
+        }
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
 
-        //The robot refuses to stafe while it is being commanded to turn. 
         SmartDashboard.putNumber("Goal bearing", goalBearing);
 
         //The right joystick is completely borked, where the R2Axis gets the X Axis displacement of the right joystick
 
         //Both joysticks assumes the right to be bearing 0 and then works clockwise from there. To have bearing 0 be in front, the bearing
         //has to be moved back by 90 degrees/ 1/2 PI
+
         //If right joystick is not being moved assume bearing to be 0
         if(Math.hypot(ps4Controller.getRightY(), ps4Controller.getR2Axis())>0.5)
             {joystickTurnBearing=Math.atan2(ps4Controller.getRightY(), ps4Controller.getR2Axis())+Math.PI/2;}

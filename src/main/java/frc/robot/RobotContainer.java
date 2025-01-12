@@ -67,7 +67,7 @@ public class RobotContainer {
   // private final PathPlannerAuto m_autoCommand;
 
   // The driver's controller
-  CommandPS4Controller m_driverController = new CommandPS4Controller(OIConstants.kDriverControllerPort);
+  CommandPS4Controller m_controller= new CommandPS4Controller(OIConstants.kDriverControllerPort);
 
   // private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
   // private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
@@ -111,7 +111,7 @@ public class RobotContainer {
     //             GameSetup.isFieldRelative, true),
     //         m_robotDrive));
         // new ManualDrive(m_robotDrive, m_driverController));
-      m_robotDrive.setDefaultCommand(new FieldOrientedDrive(m_robotDrive, m_driverController));
+      m_robotDrive.setDefaultCommand(new FieldOrientedDrive(m_robotDrive, m_controller, false));
   }
 
   private double processDriveInput(double input) {
