@@ -67,7 +67,7 @@ public class RobotContainer {
   // private final PathPlannerAuto m_autoCommand;
 
   // The driver's controller
-  CommandPS4Controller m_controller= new CommandPS4Controller(OIConstants.kDriverControllerPort);
+  CommandXboxController m_controller= new CommandXboxController(OIConstants.kDriverControllerPort);
 
   // private final VictorSPX intakeMotor = new VictorSPX(CANIds.kIntakeMotor);
   // private final VictorSPX leftShooterMotor = new VictorSPX(CANIds.kLeftShooterMotor);
