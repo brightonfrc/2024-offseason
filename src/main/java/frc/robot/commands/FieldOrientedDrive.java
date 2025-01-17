@@ -78,11 +78,9 @@ public class FieldOrientedDrive extends Command {
         //Both joysticks assumes the right to be bearing 0 and then works clockwise from there. To have bearing 0 be in front, the bearing
         //has to be moved back by 90 degrees/ 1/2 PI
 
-        //If right joystick is not being moved assume bearing to be 0
+        //If right joystick is not being moved retain previous bearing
         if (Math.hypot(xboxController.getRightY(), xboxController.getRightX())>  0.5) {
             joystickTurnBearing = Math.atan2(xboxController.getRightY(), xboxController.getRightX()) + Math.PI/2;
-        } else {
-            joystickTurnBearing = 0;
         }
         SmartDashboard.putNumber("Turn: Right Joystick bearing", joystickTurnBearing);
 
