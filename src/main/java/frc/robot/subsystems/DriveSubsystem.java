@@ -180,7 +180,7 @@ public class DriveSubsystem extends SubsystemBase {
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
-  public void drive(double ySpeed, double xSpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     System.out.println("Drive @ x" + xSpeed + " y" + ySpeed + "rot" + rot);
     SmartDashboard.putNumber("Swerve/xSpeed", xSpeed);
     SmartDashboard.putNumber("Swerve/ySpeed", ySpeed);

@@ -25,10 +25,10 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static class TestingConstants{
-    public static final double maximumSpeed=0.10;
+    public static final double maximumSpeed=0.60;
     public static final double maximumRotationSpeed=0.01;
-    public static final double maximumSpeedReduced=0.01;
-    public static final double maximumRotationSpeedReduced=0.00005;
+    public static final double maximumSpeedReduced=0.10;
+    public static final double maximumRotationSpeedReduced=0.01;
   }
   public static class GameSetup {
     public static final double startAngleOffset = 0; // Degrees

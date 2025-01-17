@@ -59,10 +59,10 @@ public class FieldOrientedDrive extends Command {
         bearingPIDController.setTolerance(Math.PI/180);
         bearingPIDController.setSetpoint(0);
         bearingPIDController.enableContinuousInput(0, 2*Math.PI);
-        if (slowMode=true){
+        if (slowMode == true) {
             maximumRotationSpeed = TestingConstants.maximumRotationSpeedReduced;
             maximumSpeed = TestingConstants.maximumSpeedReduced;
-        } else{
+        } else {
             maximumRotationSpeed = TestingConstants.maximumRotationSpeed;
             maximumSpeed = TestingConstants.maximumSpeed;
         }
@@ -86,7 +86,7 @@ public class FieldOrientedDrive extends Command {
 
         //error tolerance of 2 degrees
         if (Math.abs(joystickTurnBearing-goalBearing)>Math.PI/180*FieldOrientedDriveConstants.bearingTolerance){
-            goalBearing=joystickTurnBearing;
+            goalBearing = -joystickTurnBearing;
             bearingPIDController.reset();
             bearingPIDController.setSetpoint(goalBearing);
         }
@@ -104,13 +104,13 @@ public class FieldOrientedDrive extends Command {
         joystickMoveMagnitude = Math.pow(Math.pow(xboxController.getLeftX(), 2) + Math.pow(xboxController.getLeftY(), 2), 0.5);
         SmartDashboard.putNumber("Drive: Left joystick magnitude", joystickMoveMagnitude);
 
-        xSpeed = joystickMoveMagnitude * Math.cos(joystickMoveBearing) * TestingConstants.maximumSpeed;
+        xSpeed = -joystickMoveMagnitude * Math.cos(joystickMoveBearing) * (xboxController.a().getAsBoolean() ? TestingConstants.maximumSpeedReduced : TestingConstants.maximumSpeed);
         SmartDashboard.putNumber("xSpeed", xSpeed);
 
-        ySpeed = joystickMoveMagnitude * Math.sin(joystickMoveBearing) * TestingConstants.maximumSpeed;
+        ySpeed = -joystickMoveMagnitude * Math.sin(joystickMoveBearing) * (xboxController.a().getAsBoolean() ? TestingConstants.maximumSpeedReduced : TestingConstants.maximumSpeed);
         SmartDashboard.putNumber("ySpeed", ySpeed);
 
-        rotSpeed = bearingPIDController.calculate(robotBearing) * TestingConstants.maximumRotationSpeed;
+        rotSpeed = bearingPIDController.calculate(robotBearing) * (xboxController.a().getAsBoolean() ? TestingConstants.maximumRotationSpeedReduced : TestingConstants.maximumRotationSpeed);
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
         driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
