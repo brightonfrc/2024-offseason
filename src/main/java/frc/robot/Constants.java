@@ -26,7 +26,7 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static class TestingConstants{
     public static final double maximumSpeed=0.10;
-    public static final double maximumRotationSpeed=0.0005;
+    public static final double maximumRotationSpeed=0.01;
     public static final double maximumSpeedReduced=0.01;
     public static final double maximumRotationSpeedReduced=0.00005;
   }
@@ -44,12 +44,9 @@ public final class Constants {
     // public static final int kLiftMotor = 12;
     }
   public static final class FieldOrientedDriveConstants{
-    public static final double kFODP = 0.1;
+    public static final double kFODP = 0.25;
     public static final double kFODI = 0.0;
-    public static final double kFODD = 0.1;
-
-    //Maximum rotation speed
-    public static final double rotationScalar = Math.PI;
+    public static final double kFODD = 0.0;
 
     public static final double bearingTolerance = 2;
   }

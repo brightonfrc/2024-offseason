@@ -56,7 +56,7 @@ public class FieldOrientedDrive extends Command {
         gyro = new AHRS(SPI.Port.kMXP);
         bearingPIDController = new PIDController(FieldOrientedDriveConstants.kFODP, FieldOrientedDriveConstants.kFODI, FieldOrientedDriveConstants.kFODD);
         //setting a tolerance of 2 degrees
-        bearingPIDController.setTolerance(Math.PI/90);
+        bearingPIDController.setTolerance(Math.PI/180);
         bearingPIDController.setSetpoint(0);
         bearingPIDController.enableContinuousInput(0, 2*Math.PI);
         if (slowMode=true){
@@ -97,7 +97,7 @@ public class FieldOrientedDrive extends Command {
         robotBearing=robotBearing/180*Math.PI;
         SmartDashboard.putNumber("Robot bearing", robotBearing);
 
-        joystickMoveBearing=Math.atan2(xboxController.getLeftY(), xboxController.getLeftX())+Math.PI/2;
+        joystickMoveBearing=Math.atan2(xboxController.getLeftY(), xboxController.getLeftX());
         SmartDashboard.putNumber("Drive: Left joystick bearing", joystickMoveBearing);
 
         joystickMoveBearing=joystickMoveBearing-robotBearing;
@@ -112,7 +112,7 @@ public class FieldOrientedDrive extends Command {
         ySpeed=joystickMoveMagnitude*Math.sin(joystickMoveBearing)*TestingConstants.maximumSpeed;
         SmartDashboard.putNumber("ySpeed", ySpeed);
 
-        rotSpeed=bearingPIDController.calculate(robotBearing)*FieldOrientedDriveConstants.rotationScalar*TestingConstants.maximumSpeed;
+        rotSpeed=bearingPIDController.calculate(robotBearing)*TestingConstants.maximumRotationSpeed;
         SmartDashboard.putNumber("rotSpeed", rotSpeed);
 
         driveSubsystem.drive(ySpeed, xSpeed, rotSpeed, false, true);
